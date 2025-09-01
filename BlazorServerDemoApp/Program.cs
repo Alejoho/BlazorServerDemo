@@ -1,4 +1,6 @@
 using BlazorServerDemoApp.Components;
+using DataLibrary.Data;
+using DataLibrary.Db;
 
 namespace BlazorServerDemoApp
 {
@@ -11,6 +13,14 @@ namespace BlazorServerDemoApp
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            builder.Services.AddSingleton(new ConnectionStringData()
+            {
+                SqlConnectionName = "Default"
+            });
+            builder.Services.AddSingleton<IDataAccess, SqlDb>();
+            builder.Services.AddSingleton<IFoodData, FoodData>();
+            builder.Services.AddSingleton<IOrderData, OrderData>();
 
             var app = builder.Build();
 
