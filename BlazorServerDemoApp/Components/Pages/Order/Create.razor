@@ -1,0 +1,60 @@
+﻿@page "/order/create"
+@inject IFoodData foodData
+@inject IOrderData orderData
+@inject NavigationManager navigationManager
+
+<h1>Create Order</h1>
+
+<EditForm Model="_order" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary Model="_order"/>
+
+    <div>
+        <label class="form-label">Meal</label>
+        <InputSelect @bind-Value="_order.FoodId" class="form-control">
+            <option hidden selected>Select a meal</option>
+            @foreach (var food in _foodItems)
+            {
+                <option value="@food.Id">@String.Format("{0} - {1:C}", food.Title, food.Price)</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(() => _order.FoodId)"/>
+    </div>
+
+    <div>
+        <label class="form-label">Quantity</label>
+        <InputNumber @bind-Value="_order.Quantity" class="form-control"></InputNumber>
+        <ValidationMessage For="(() => _order.Quantity)"></ValidationMessage>
+    </div>
+
+    <div>
+        <label class="form-label">Ordered By</label>
+        <InputText @bind-Value="_order.OrderedBy" class="form-control"></InputText>
+        <ValidationMessage For="(() => _order.OrderedBy)"></ValidationMessage>
+    </div>
+
+    <div>
+        <input type="submit" value="Create Order" class="btn btn-primary mt-2"/>
+    </div>
+</EditForm>
+
+
+@code {
+    private OrderModel _order = new();
+    private List<FoodModel> _foodItems = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _foodItems = await foodData.GetAllFood();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        _order.Total = Decimal.Multiply(
+            _order.Quantity,
+            _foodItems.First(f => f.Id == _order.FoodId).Price);
+
+            int id = await orderData.CreateOrderAsync(_order);
+    }
+
+}

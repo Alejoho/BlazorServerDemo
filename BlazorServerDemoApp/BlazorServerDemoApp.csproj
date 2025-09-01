@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Order\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="DataLibrary">
       <HintPath>DataLibrary.dll</HintPath>
     </Reference>
