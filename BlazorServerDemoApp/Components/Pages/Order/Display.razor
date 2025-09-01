@@ -1,6 +1,7 @@
 @page "/order/display/{id:int}"
 @inject IFoodData foodData
 @inject IOrderData orderData
+@inject NavigationManager navigationManager
 
 @if (isNotFound == true)
 {
@@ -43,13 +44,27 @@ else
             <th scope="row"><strong>Total</strong></th>
             <td>@_order.Total.ToString("C")</td>
         </tr>
-        @* <tr> *@
-        @*     <td colspan="2"> *@
-        @*         <a class="btn btn-danger"> *@
-        @*             Delete *@
-        @*             Order</a> *@
-        @*     </td> *@
-        @* </tr> *@
+        <tr>
+            @if (_confirmDelete is false)
+            {
+                <td colspan="2">
+                    <a class="btn btn-danger" @onclick="() => _confirmDelete=true">
+                        Delete
+                        Order</a>
+                </td>
+            }
+            else
+            {
+                <td colspan="2">
+                    <a class="btn btn-outline-danger"  @onclick="DeleteOrder">
+                        Confirm Delete
+                    </a>
+                    <a class="btn btn-secondary" @onclick="() => _confirmDelete = false">
+                        Cancel
+                    </a>
+                </td>
+            }
+        </tr>
         </tbody>
     </table>
 
@@ -74,11 +89,12 @@ else
     private FoodModel _food;
 
     private bool isNotFound = false;
+    private bool _confirmDelete = false;
 
     protected override async Task OnInitializedAsync()
     {
         _order = await orderData.GetOrderByIdAsync(Id);
-    
+
         if (_order is not null)
         {
             var foods = await foodData.GetAllFood();
@@ -88,6 +104,13 @@ else
         {
             isNotFound = true;
         }
-        
     }
+
+    private async Task DeleteOrder()
+    {
+        await orderData.DeleteOrder(_order.Id);
+        
+        navigationManager.NavigateTo("/order/create");
+    }
+
 }
