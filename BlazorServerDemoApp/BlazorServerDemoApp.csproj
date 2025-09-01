@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Food\" />
     <Folder Include="Components\Pages\Order\" />
   </ItemGroup>
 
@@ -15,9 +14,9 @@
     <Reference Include="DataLibrary">
       <HintPath>DataLibrary.dll</HintPath>
     </Reference>
-	  <PackageReference Include="Dapper" Version="2.1.66"/>
-	  <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1"/>
-	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8"/>
+	  <PackageReference Include="Dapper" Version="2.1.66" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
   </ItemGroup>
 
 </Project>
