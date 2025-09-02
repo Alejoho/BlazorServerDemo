@@ -1,0 +1,59 @@
+@page "/order/list"
+@inject IFoodData foodData
+@inject IOrderData orderData
+@inject NavigationManager navigationManager
+
+
+<h1>List of Orders</h1>
+
+<table class="table table-striped">
+    <caption class="visually-hidden">List of Orders</caption>
+    <thead class="bg-dark text-white">
+    <tr>
+        <th scope="col">Ordered By</th>
+        <th scope="col">Date</th>
+        <th scope="col">Meal</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Total</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_orders is null)
+    {
+        <tr>
+            <td colspan="3">Loading...</td>
+        </tr>
+    }
+    else
+    {
+        @foreach (var order in _orders)
+        {
+            <tr>
+                <td>@order.OrderedBy</td>
+                <td>@order.Date</td>
+                <td>@_foods.FirstOrDefault(f => f.Id == order.FoodId)?.Title</td>
+                <td>@_foods.FirstOrDefault(f => f.Id == order.FoodId)?.Price.ToString("C")</td>
+                <td>@order.Quantity</td>
+                <td>@order.Total.ToString("C")</td>
+                <td>
+                    <NavLink href="@($"/order/display/{order.Id}")"
+                       class="btn btn-primary">Details</NavLink>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+@code {
+    private List<OrderModel> _orders;
+    private List<FoodModel> _foods;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _orders = await orderData.GetAllOrders();
+        _foods = await foodData.GetAllFood();
+    }
+}
