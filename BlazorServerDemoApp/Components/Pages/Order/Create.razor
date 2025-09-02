@@ -10,8 +10,8 @@
     <ValidationSummary Model="_order"/>
 
     <div>
-        <label class="form-label">Meal</label>
-        <InputSelect @bind-Value="_order.FoodId" class="form-control">
+        <label for="food-id" class="form-label">Meal</label>
+        <InputSelect id="food-id" @bind-Value="_order.FoodId" class="form-control">
             <option hidden selected>Select a meal</option>
             @foreach (var food in _foodItems)
             {
@@ -22,14 +22,14 @@
     </div>
 
     <div>
-        <label class="form-label">Quantity</label>
-        <InputNumber @bind-Value="_order.Quantity" class="form-control"></InputNumber>
+        <label for="quantity" class="form-label">Quantity</label>
+        <InputNumber id="quantity" @bind-Value="_order.Quantity" class="form-control"></InputNumber>
         <ValidationMessage For="(() => _order.Quantity)"></ValidationMessage>
     </div>
 
     <div>
-        <label class="form-label">Ordered By</label>
-        <InputText @bind-Value="_order.OrderedBy" class="form-control"></InputText>
+        <label for="ordered-by" class="form-label">Ordered By</label>
+        <InputText id="ordered-by" @bind-Value="_order.OrderedBy" class="form-control"></InputText>
         <ValidationMessage For="(() => _order.OrderedBy)"></ValidationMessage>
     </div>
 
@@ -55,7 +55,8 @@
             _foodItems.First(f => f.Id == _order.FoodId).Price);
 
         int id = await orderData.CreateOrderAsync(_order);
-        
+
         navigationManager.NavigateTo($"/order/display/{id}");
     }
+
 }

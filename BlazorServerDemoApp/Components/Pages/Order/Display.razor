@@ -73,11 +73,9 @@ else
         <DataAnnotationsValidator/>
         <ValidationSummary Model="_orderUpdate"/>
         
-        <div asp-validation-summary="ModelOnly"></div>
-        <input name="id" value="@_order.Id" hidden>
         <div>
-            <label class="form-label">Ordered By</label>
-            <InputText @bind-Value="_orderUpdate.NewName" class="form-control"/>
+            <label for="new-name" class="form-label">Ordered By</label>
+            <InputText id="new-name" @bind-Value="_orderUpdate.NewName" class="form-control"/>
             <ValidationMessage For="(() => _orderUpdate.NewName)" class="text-danger"></ValidationMessage>
         </div>
         <div>
