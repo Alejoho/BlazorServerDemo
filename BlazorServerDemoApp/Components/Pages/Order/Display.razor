@@ -1,4 +1,5 @@
 @page "/order/display/{id:int}"
+@using BlazorServerDemoApp.Models
 @inject IFoodData foodData
 @inject IOrderData orderData
 @inject NavigationManager navigationManager
@@ -68,18 +69,21 @@ else
         </tbody>
     </table>
 
-    @* <form method="post" asp-action="Update"> *@
-    @*     <div asp-validation-summary="ModelOnly"></div> *@
-    @*     <input name="id" value="@_order.Id" hidden> *@
-    @*     <div> *@
-    @*         <label asp-for="@Model.NewName" class="form-label">Ordered By</label> *@
-    @*         <input asp-for="@Model.NewName" value="@_order.OrderedBy" class="form-control"> *@
-    @*         <span asp-validation-for="NewName" class="text-danger val-msg"></span> *@
-    @*     </div> *@
-    @*     <div> *@
-    @*         <input type="submit" value="Update Client" class="btn btn-primary"> *@
-    @*     </div> *@
-    @* </form> *@
+    <EditForm Model="_orderUpdate" OnValidSubmit="UpdateOrder">
+        <DataAnnotationsValidator/>
+        <ValidationSummary Model="_orderUpdate"/>
+        
+        <div asp-validation-summary="ModelOnly"></div>
+        <input name="id" value="@_order.Id" hidden>
+        <div>
+            <label class="form-label">Ordered By</label>
+            <InputText @bind-Value="_orderUpdate.NewName" class="form-control"/>
+            <ValidationMessage For="(() => _orderUpdate.NewName)" class="text-danger"></ValidationMessage>
+        </div>
+        <div>
+            <input type="submit" value="Update Client" class="btn btn-primary">
+        </div>
+    </EditForm>
 }
 
 @code {
@@ -87,6 +91,7 @@ else
 
     private OrderModel _order;
     private FoodModel _food;
+    private OrderUpdateModel _orderUpdate;
 
     private bool isNotFound = false;
     private bool _confirmDelete = false;
@@ -99,6 +104,10 @@ else
         {
             var foods = await foodData.GetAllFood();
             _food = foods.First(f => f.Id == _order.FoodId);
+            _orderUpdate = new OrderUpdateModel()
+            {
+                NewName = _order.OrderedBy
+            };
         }
         else
         {
@@ -113,4 +122,9 @@ else
         navigationManager.NavigateTo("/order/create");
     }
 
+    private async Task UpdateOrder()
+    {
+        await orderData.UpdateOrderName(_order.Id, _orderUpdate.NewName);
+        _order.OrderedBy = _orderUpdate.NewName;
+    }
 }
