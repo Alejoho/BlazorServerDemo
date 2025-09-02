@@ -1,0 +1,93 @@
+@page "/order/display/{id:int}"
+@inject IFoodData foodData
+@inject IOrderData orderData
+
+@if (isNotFound == true)
+{
+    <h1>The Order Was Not Found</h1>
+}
+else if (_order is null)
+{
+    <h1>Loading . . .</h1>
+}
+else
+{
+    <h1>Order Details</h1>
+
+    <table class="table">
+        <caption class="visually-hidden">Order Details</caption>
+        <tbody>
+        <tr>
+            <th scope="row"><strong>Ordered By</strong></th>
+            <td>@_order.OrderedBy</td>
+        </tr>
+        <tr>
+            <th scope="row"><strong>Ordered On</strong></th>
+            <td>
+                <time datetime="@_order.Date.ToString("s")">@_order.Date</time>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row"><strong>Meal</strong></th>
+            <td>@_food.Title</td>
+        </tr>
+        <tr>
+            <th scope="row"><strong>Price</strong></th>
+            <td>@_food.Price.ToString("C")</td>
+        </tr>
+        <tr>
+            <th scope="row"><strong>Quantity</strong></th>
+            <td>@_order.Quantity</td>
+        </tr>
+        <tr>
+            <th scope="row"><strong>Total</strong></th>
+            <td>@_order.Total.ToString("C")</td>
+        </tr>
+        @* <tr> *@
+        @*     <td colspan="2"> *@
+        @*         <a class="btn btn-danger"> *@
+        @*             Delete *@
+        @*             Order</a> *@
+        @*     </td> *@
+        @* </tr> *@
+        </tbody>
+    </table>
+
+    @* <form method="post" asp-action="Update"> *@
+    @*     <div asp-validation-summary="ModelOnly"></div> *@
+    @*     <input name="id" value="@_order.Id" hidden> *@
+    @*     <div> *@
+    @*         <label asp-for="@Model.NewName" class="form-label">Ordered By</label> *@
+    @*         <input asp-for="@Model.NewName" value="@_order.OrderedBy" class="form-control"> *@
+    @*         <span asp-validation-for="NewName" class="text-danger val-msg"></span> *@
+    @*     </div> *@
+    @*     <div> *@
+    @*         <input type="submit" value="Update Client" class="btn btn-primary"> *@
+    @*     </div> *@
+    @* </form> *@
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private OrderModel _order;
+    private FoodModel _food;
+
+    private bool isNotFound = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _order = await orderData.GetOrderByIdAsync(Id);
+    
+        if (_order is not null)
+        {
+            var foods = await foodData.GetAllFood();
+            _food = foods.First(f => f.Id == _order.FoodId);
+        }
+        else
+        {
+            isNotFound = true;
+        }
+        
+    }
+}

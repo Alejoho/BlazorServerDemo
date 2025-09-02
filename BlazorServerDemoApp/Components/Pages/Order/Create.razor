@@ -54,7 +54,8 @@
             _order.Quantity,
             _foodItems.First(f => f.Id == _order.FoodId).Price);
 
-            int id = await orderData.CreateOrderAsync(_order);
+        int id = await orderData.CreateOrderAsync(_order);
+        
+        navigationManager.NavigateTo($"/order/display/{id}");
     }
-
 }
