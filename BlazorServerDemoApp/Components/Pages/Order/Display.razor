@@ -57,7 +57,7 @@ else
             else
             {
                 <td colspan="2">
-                    <a class="btn btn-outline-danger"  @onclick="DeleteOrder">
+                    <a class="btn btn-outline-danger" @onclick="DeleteOrder">
                         Confirm Delete
                     </a>
                     <a class="btn btn-secondary" @onclick="() => _confirmDelete = false">
@@ -72,11 +72,13 @@ else
     <EditForm Model="_orderUpdate" OnValidSubmit="UpdateOrder">
         <DataAnnotationsValidator/>
         <ValidationSummary Model="_orderUpdate"/>
-        
+
         <div>
             <label for="new-name" class="form-label">Ordered By</label>
             <InputText id="new-name" @bind-Value="_orderUpdate.NewName" class="form-control"/>
-            <ValidationMessage For="(() => _orderUpdate.NewName)" class="text-danger"></ValidationMessage>
+            <div class="validation-wrapper">
+                <ValidationMessage For="(() => _orderUpdate.NewName)"></ValidationMessage>
+            </div>
         </div>
         <div>
             <input type="submit" value="Update Client" class="btn btn-primary">
@@ -116,7 +118,7 @@ else
     private async Task DeleteOrder()
     {
         await orderData.DeleteOrder(_order.Id);
-        
+
         navigationManager.NavigateTo("/order/create");
     }
 

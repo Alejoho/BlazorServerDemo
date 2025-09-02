@@ -18,19 +18,25 @@
                 <option value="@food.Id">@String.Format("{0} - {1:C}", food.Title, food.Price)</option>
             }
         </InputSelect>
-        <ValidationMessage For="(() => _order.FoodId)"/>
+        <div class="validation-wrapper">
+            <ValidationMessage For="(() => _order.FoodId)"/>
+        </div>
     </div>
 
     <div>
         <label for="quantity" class="form-label">Quantity</label>
         <InputNumber id="quantity" @bind-Value="_order.Quantity" class="form-control"></InputNumber>
-        <ValidationMessage For="(() => _order.Quantity)"></ValidationMessage>
+        <div class="validation-wrapper">
+            <ValidationMessage For="(() => _order.Quantity)"></ValidationMessage>
+        </div>
     </div>
 
     <div>
         <label for="ordered-by" class="form-label">Ordered By</label>
         <InputText id="ordered-by" @bind-Value="_order.OrderedBy" class="form-control"></InputText>
-        <ValidationMessage For="(() => _order.OrderedBy)"></ValidationMessage>
+        <div class="validation-wrapper">
+            <ValidationMessage For="(() => _order.OrderedBy)"></ValidationMessage>
+        </div>
     </div>
 
     <div>
